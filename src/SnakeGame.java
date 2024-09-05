@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.*;
 
-public class SnakeGame extends JPanel implements ActionListener {
+public class SnakeGame extends JPanel implements ActionListener, KeyListener {
     private class Tile {
         int x;
         int y;
@@ -33,6 +33,8 @@ public class SnakeGame extends JPanel implements ActionListener {
         this.boardWidth = boardWidth;
         setPreferredSize(new Dimension(this.boardWidth, this.boardHeight));
         setBackground(Color.BLACK);
+        addKeyListener(this);
+        setFocusable(true);
 
         snakeHead = new Tile(5, 5);
         food = new Tile(10, 10);
@@ -74,4 +76,27 @@ public class SnakeGame extends JPanel implements ActionListener {
         move();
         repaint();
     }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_UP) {
+            velocityX = 0;
+            velocityY = -1;
+        } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+            velocityX = 0;
+            velocityY = 1;
+        } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+            velocityX = -1;
+            velocityY = 0;
+        } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+            velocityX = 1;
+            velocityY = 0;
+        }
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {}
+
+    @Override
+    public void keyReleased(KeyEvent e) {}
 }
