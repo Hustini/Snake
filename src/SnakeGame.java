@@ -20,6 +20,7 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
     int tileSize = 25;
 
     Tile snakeHead;
+    ArrayList<Tile> snakeBody;
 
     Tile food;
     Random random;
@@ -37,6 +38,8 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
         setFocusable(true);
 
         snakeHead = new Tile(5, 5);
+        snakeBody = new ArrayList<Tile>();
+
         food = new Tile(10, 10);
         random = new Random();
         placeFood();
@@ -59,6 +62,11 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
 
         g.setColor(Color.GREEN);
         g.fillRect(snakeHead.x * tileSize, snakeHead.y * tileSize, tileSize, tileSize);
+
+        for (int i = 0; snakeBody.size() > i; i++) {
+            Tile snakePart = snakeBody.get(i);
+            g.fillRect(snakePart.x * tileSize, snakePart.y * tileSize, tileSize, tileSize);
+        }
     }
 
     public void placeFood() {
@@ -66,7 +74,16 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
         food.y = random.nextInt(boardHeight/tileSize);
     }
 
+    public boolean collision(Tile tile1, Tile tile2) {
+        return tile1.x == tile2.x && tile1.y == tile2.y;
+    }
+
     public void move() {
+        if (collision(snakeHead, food)) {
+            snakeBody.add(new Tile(food.x, food.y));
+            placeFood();
+        }
+
         snakeHead.x += velocityX;
         snakeHead.y += velocityY;
     }
