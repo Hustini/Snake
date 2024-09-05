@@ -72,7 +72,7 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
         g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
         if (gameOver) {
             g.setColor(Color.RED);
-            g.drawString("Game Over", 20, 20);
+            g.drawString("Game Over", boardWidth / 2 - 50, boardHeight / 2 - 50);
         }
     }
 
