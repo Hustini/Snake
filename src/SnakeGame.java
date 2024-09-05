@@ -28,6 +28,7 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
     Timer gameloop;
     int velocityX;
     int velocityY;
+    boolean gameOver = false;
 
     SnakeGame(int boardHeight, int boardWidth) {
         this.boardHeight = boardHeight;
@@ -84,14 +85,50 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
             placeFood();
         }
 
+        // Snake Body
+        for (int i = snakeBody.size() - 1; i >= 0; i--) {
+            Tile snakePart = snakeBody.get(i);
+            if (i == 0) {
+                snakePart.x = snakeHead.x;
+                snakePart.y = snakeHead.y;
+            } else {
+                Tile prevSnakePart = snakeBody.get(i - 1);
+                snakePart.x = prevSnakePart.x;
+                snakePart.y = prevSnakePart.y;
+            }
+        }
+
         snakeHead.x += velocityX;
         snakeHead.y += velocityY;
+
+        // Snake head colliding with itself
+        for (int i = 0; i < snakeBody.size(); i++) {
+            Tile snakePart = snakeBody.get(i);
+            // collision
+            if (collision(snakeHead, snakePart)) {
+                gameOver = true;
+            }
+        }
+
+        // Snake leaving the screen
+        if (snakeHead.x * tileSize < 0) {
+            gameOver = true;
+        } else if (snakeHead.x * tileSize > boardWidth) {
+            gameOver = true;
+        } else if (snakeHead.y * tileSize < 0) {
+            gameOver = true;
+        } else if (snakeHead.y * tileSize > boardHeight) {
+            gameOver = true;
+        }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         move();
         repaint();
+        if (gameOver) {
+            gameloop.stop();
+        }
     }
 
     @Override
